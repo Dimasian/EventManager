@@ -1,0 +1,105 @@
+﻿@model EventManager.ViewModels.EventWithDetailsViewModel
+
+
+<div>
+	<h4>Event name: @Model.myEvent.Name</h4>
+
+	<table class="table">
+		<tr style="font-size:large">
+			EVENT DETAILS
+		</tr>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(x => Model.myEvent.Name)
+			</th>
+			<th>
+				@Html.DisplayNameFor(x => Model.myEvent.ManagerId)
+			</th>
+			<th>
+				@Html.DisplayNameFor(x => Model.myEvent.EventType)
+			</th>
+			<td>
+				@Html.DisplayNameFor(modelItem => Model.myEvent.IsPublic)
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				@Html.DisplayFor(x => Model.myEvent.Name)
+			</td>
+			<td>
+				@Html.DisplayFor(x => Model.myEvent.User.FullName)
+			</td>
+			<td>
+				@Html.DisplayFor(x => Model.myEvent.EventType.Type)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => Model.myEvent.IsPublic)
+			</td>
+		</tr>
+
+	</table>
+
+	<table class="table">
+		<tr style="font-size:large">
+			PARTICIPANTS
+		</tr>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(x => Model.participants.FirstOrDefault().User.FullName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(x => Model.participants.FirstOrDefault().ParticipantType)
+			</th>
+		</tr>
+
+		@foreach (Participant p in Model.participants)
+		{
+		<tr>
+			<td>
+				@Html.DisplayFor(x => p.User.FullName)
+			</td>
+			<td>
+				@Html.DisplayFor(x => p.ParticipantType.Type)
+			</td>
+
+		</tr>
+		} 
+	</table>
+
+	<table class="table">
+		<tr style="font-size:large">
+			INVITATIONS
+		</tr>
+
+		<tr>
+			<th>
+				@Html.DisplayNameFor(x => Model.myEvent.User.FullName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(x => Model.myEvent.Invitations.FirstOrDefault().ParticipantType)
+			</th>
+            <th>
+                @Html.DisplayNameFor(x => Model.myEvent.User.Email)
+            </th>
+		</tr>
+
+		@foreach (Invitation p in Model.myEvent.Invitations)
+		{
+		<tr>
+			<td>
+				@Html.DisplayFor(x => p.User.FullName)
+			</td>
+			<td>
+				@Html.DisplayFor(x => p.ParticipantType.Type)
+			</td>
+            <th>
+                @Html.DisplayFor(x => p.Email)
+            </th>
+		</tr>
+		}
+	</table>
+</div>
+<p>
+	@Html.ActionLink("Back to List", "IndexById", new { userId = Model.myEvent.ManagerId })
+</p>

@@ -1,0 +1,90 @@
+﻿@model EventManager.User
+
+@{
+    ViewBag.Title = "User Details";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MiddleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MiddleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NickName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NickName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RegistrationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RegistrationDate)
+        </dd>
+
+        @if (Model.UserImageMappings != null && Model.UserImageMappings.Any())
+        {
+        <dt></dt>
+        <dd>
+            <img src="@(Url.Content(Constants.UsersImagePath) + Model.UserImageMappings.OrderBy(pim => pim.ImageNumber).ElementAt(0).UserImage.FileName)" style=padding:5px>
+        </dd>
+        <dt></dt>
+        <dd>
+            @foreach (var item in Model.UserImageMappings.OrderBy(pim =>pim.ImageNumber))
+            {
+            <a href="@(Url.Content(Constants.UsersImagePath) +item.UserImage.FileName)">
+                <img src="@(Url.Content(Constants.UsersThumbnailPath) +item.UserImage.FileName)" style=padding:5px>
+            </a>
+            }
+        </dd>
+        }
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

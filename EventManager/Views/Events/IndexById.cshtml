@@ -1,0 +1,222 @@
+﻿@model EventManager.ViewModels.EventListViewModel
+@using PagedList.Mvc
+
+@{
+  ViewBag.Title = "List of Events for - " + Model.user.FullName;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+	@(String.IsNullOrWhiteSpace(Model.Search) ? "Showing all" : "You search for " +
+Model.Search + " found") @Model.userEvents.TotalItemCount products
+</p>
+
+<p>
+	@*SEARCH, CATEGORY, SORTBY FIELDS*@
+	@*using GET: способ передачи параметра через метод GET - @Html.Hidden("clubid", ViewBag.Club.id)*@
+	@*using POST: - @using (Html.BeginForm("IndexById", "Events", new { userId = Model.user.Id }, FormMethod.Post, new { @class = "navbar-form navbar-left" }))*@
+	@using (Html.BeginRouteForm("EventsbyCategory", FormMethod.Get, new { @class = "navbar-form navbar-left" }))
+	{
+	@Html.Hidden("userId", Model.user.Id)
+	<div class="form-group">
+		@Html.TextBox("Search", Model.Search, new { @class = "form-control", @placeholder = "Search Events" })
+	</div>
+	@*FILTER BY EVENT TYPE CATEGORY*@
+	<label>Filter by category:</label> @Html.DropDownListFor(vm => vm.eventTypeId, Model.EventTypesFilterItems, "All")
+	@*SORT EVENTS BY DATE*@
+	<label>Sort by event date:</label> @Html.DropDownListFor(vm => vm.SortBy, new SelectList(Model.Sorts, "Value", "Key"), "Default")
+	<input type="submit" value="FILTER EVENTS">
+	}
+</p>
+
+
+
+
+
+<br />
+<p>
+<h2>Your Events:</h2>
+</p>
+<table class="table">
+	<tr>
+		@Html.ActionLink("Create New Event", "Create", new { userId = Model.user.Id })
+	</tr>
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.userEvents.FirstOrDefault().EventType)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.userEvents.FirstOrDefault().ManagerId)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.userEvents.FirstOrDefault().Name)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.userEvents.FirstOrDefault().Date)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.userEvents.FirstOrDefault().IsPublic)
+		</th>
+		<th></th>
+	</tr>
+	@*for each event in events, where user is participant*@
+	@foreach (var item in Model.userEvents)
+	{
+	<tr>
+		<td>
+			@Html.DisplayFor(modelItem => item.EventType.Type)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.User.FullName)
+		</td>
+		<th>
+			@Html.DisplayFor(modelItem => item.Name)
+		</th>
+
+		<td>
+			@Html.DisplayFor(modelItem => item.Date)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.IsPublic)
+		</td>
+		<td>
+			@if (item.ManagerId == Model.user.Id)
+			{
+			@Html.ActionLink("Edit", "Edit", new { eventId = item.Id, userId = item.User.Id });<text>|</text>
+			@Html.ActionLink("Delete", "Delete", new { eventId = item.Id, userId = item.User.Id });<text>|</text>
+			}
+			else
+			{
+				/**/
+				@Html.ActionLink("Leave Event", "LeaveEvent", new { userId = Model.user.Id, eventId = item.Id });<text>|</text>
+			}
+
+			@Html.ActionLink("Details", "Details", new { eventId = item.Id })|
+		</td>
+	</tr>
+	}
+
+</table>
+<div>
+	Page @(Model.userEvents.PageCount < Model.userEvents.PageNumber ? 0 : Model.userEvents.PageNumber) of @Model.userEvents.PageCount
+@Html.PagedListPager(Model.userEvents, pageUserEvents => Url.Action("IndexById",new{
+																					userId =@Model.user.Id,
+																					eventTypeId =@Model.eventTypeId,
+																					Search = @Model.Search,
+																					sortBy = @Model.SortBy,
+																					pageUserEvents,
+																					pageInvitations =@Model.pageInvitations,
+																					pagePublicEvents =@Model.pagePublicEvents}))
+</div>
+
+<hr />
+<h4>You are invited to:</h4>
+<table class="table">
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.invitations.FirstOrDefault().EventType)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.invitations.FirstOrDefault().ManagerId)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.invitations.FirstOrDefault().Name)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.invitations.FirstOrDefault().Date)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.invitations.FirstOrDefault().IsPublic)
+		</th>
+		<th></th>
+	</tr>
+
+	@*for each event in invitations events*@
+	@foreach (var item in Model.invitations)
+	{
+	<tr>
+		<td>
+			@Html.DisplayFor(modelItem => item.EventType.Type)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.User.FullName)
+		</td>
+		<th>
+			@Html.DisplayFor(modelItem => item.Name)
+		</th>
+		<td>
+			@Html.DisplayFor(modelItem => item.Date)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.IsPublic)
+		</td>
+		<td>
+			@Html.ActionLink("Details", "Details", new { eventId = item.Id })|
+			@Html.ActionLink("Accept", "AcceptInvitation", "Invitations", new { userId = Model.user.Id, eventId = item.Id }, null) |
+			@Html.ActionLink("Decline", "DeclineInvitation", "Invitations", new { userId = Model.user.Id, eventId = item.Id }, null)
+		</td>
+	</tr>
+	}
+
+</table>
+<div>
+	Page @(Model.invitations.PageCount < Model.invitations.PageNumber ? 0 : Model.invitations.PageNumber) of @Model.invitations.PageCount
+	@Html.PagedListPager(Model.invitations, pageInvitations => Url.Action("IndexById", new {
+	userId = @Model.user.Id, eventTypeId = @Model.eventTypeId, Search = @Model.Search, sortBy = @Model.SortBy,@Model.pageUserEvents, pageInvitations, @Model.pagePublicEvents }))
+</div>
+
+<hr />
+<h4>Public Events</h4>
+<table class="table">
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.publicEvents.FirstOrDefault().EventType)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.publicEvents.FirstOrDefault().ManagerId)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.publicEvents.FirstOrDefault().Name)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.publicEvents.FirstOrDefault().Date)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.publicEvents.FirstOrDefault().IsPublic)
+		</th>
+		<th></th>
+	</tr>
+	@*for each event in public events*@
+	@foreach (var item in Model.publicEvents)
+	{
+	<tr>
+		<td>
+			@Html.DisplayFor(modelItem => item.EventType.Type)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.User.FullName)
+		</td>
+		<th>
+			@Html.DisplayFor(modelItem => item.Name)
+		</th>
+
+		<td>
+			@Html.DisplayFor(modelItem => item.Date)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.IsPublic)
+		</td>
+		<td>
+			@Html.ActionLink("Details", "Details", new { eventId = item.Id })|
+			@Html.ActionLink("Join event", "JoinEvent", "Events", new { userId = Model.user.Id, eventId = item.Id }, null)
+		</td>
+	</tr>
+	}
+
+</table>
+<div>
+	Page @(Model.publicEvents.PageCount < Model.publicEvents.PageNumber ? 0 : Model.publicEvents.PageNumber) of @Model.publicEvents.PageCount
+	@Html.PagedListPager(Model.publicEvents, pagePublicEvents => Url.Action("IndexById", new {
+	userId = @Model.user.Id, eventTypeId = @Model.eventTypeId, Search = @Model.Search, sortBy = @Model.SortBy, @Model.pageUserEvents, @Model.pageInvitations, pagePublicEvents }))
+</div>

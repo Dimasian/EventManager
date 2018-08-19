@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e357abe1c1a7487fa322286c949c863d" Name="Diagram1">
+        <EntityTypeShape EntityType="EventsRegistrationDBModel.Event" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="EventsRegistrationDBModel.EventType" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EventsRegistrationDBModel.Invitation" Width="1.5" PointX="8.25" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EventsRegistrationDBModel.Participant" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EventsRegistrationDBModel.ParticipantType" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EventsRegistrationDBModel.UserImageMapping" Width="1.5" PointX="6" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="EventsRegistrationDBModel.UserImage" Width="1.5" PointX="3.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EventsRegistrationDBModel.User" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <AssociationConnector Association="EventsRegistrationDBModel.FK_Events_EventTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="EventsRegistrationDBModel.FK_Events_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="EventsRegistrationDBModel.FK_Invitations_Events" ManuallyRouted="false" />
+        <AssociationConnector Association="EventsRegistrationDBModel.FK_Participants_Events" ManuallyRouted="false" />
+        <AssociationConnector Association="EventsRegistrationDBModel.FK_Invitations_ParticipantTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="EventsRegistrationDBModel.FK_Invitations_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="EventsRegistrationDBModel.FK_Participants_ParticipantTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="EventsRegistrationDBModel.FK_Participants_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="EventsRegistrationDBModel.FK_UserImageMapping_UserImages" ManuallyRouted="false" />
+        <AssociationConnector Association="EventsRegistrationDBModel.FK_UserImageMapping_Users" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

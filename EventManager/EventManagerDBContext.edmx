@@ -1,0 +1,648 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="EventsRegistrationDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Events">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="ManagerId" Type="int" Nullable="false" />
+          <Property Name="EventTypeId" Type="int" Nullable="false" />
+          <Property Name="IsPublic" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EventTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Invitations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="ParticipantTypeId" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Participants">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="EventId" Type="int" Nullable="false" />
+          <Property Name="ParticipantTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ParticipantTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserImageMapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ImageNumber" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserImageID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserImages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="260" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MiddleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NickName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="RegistrationDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Events_EventTypes">
+          <End Role="EventTypes" Type="Self.EventTypes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Events" Type="Self.Events" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Events">
+              <PropertyRef Name="EventTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Events_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Events" Type="Self.Events" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Events">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitations_Events">
+          <End Role="Events" Type="Self.Events" Multiplicity="1" />
+          <End Role="Invitations" Type="Self.Invitations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Events">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invitations">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitations_ParticipantTypes">
+          <End Role="ParticipantTypes" Type="Self.ParticipantTypes" Multiplicity="1" />
+          <End Role="Invitations" Type="Self.Invitations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ParticipantTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invitations">
+              <PropertyRef Name="ParticipantTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitations_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Invitations" Type="Self.Invitations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invitations">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Participants_Events">
+          <End Role="Events" Type="Self.Events" Multiplicity="1" />
+          <End Role="Participants" Type="Self.Participants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Events">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participants">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Participants_ParticipantTypes">
+          <End Role="ParticipantTypes" Type="Self.ParticipantTypes" Multiplicity="1" />
+          <End Role="Participants" Type="Self.Participants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ParticipantTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participants">
+              <PropertyRef Name="ParticipantTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Participants_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Participants" Type="Self.Participants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participants">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserImageMapping_UserImages">
+          <End Role="UserImages" Type="Self.UserImages" Multiplicity="1" />
+          <End Role="UserImageMapping" Type="Self.UserImageMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserImages">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserImageMapping">
+              <PropertyRef Name="UserImageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserImageMapping_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserImageMapping" Type="Self.UserImageMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserImageMapping">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EventsRegistrationDBModelStoreContainer">
+          <EntitySet Name="Events" EntityType="Self.Events" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EventTypes" EntityType="Self.EventTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invitations" EntityType="Self.Invitations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Participants" EntityType="Self.Participants" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ParticipantTypes" EntityType="Self.ParticipantTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserImageMapping" EntityType="Self.UserImageMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserImages" EntityType="Self.UserImages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Events_EventTypes" Association="Self.FK_Events_EventTypes">
+            <End Role="EventTypes" EntitySet="EventTypes" />
+            <End Role="Events" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Events_Users" Association="Self.FK_Events_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Events" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitations_Events" Association="Self.FK_Invitations_Events">
+            <End Role="Events" EntitySet="Events" />
+            <End Role="Invitations" EntitySet="Invitations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitations_ParticipantTypes" Association="Self.FK_Invitations_ParticipantTypes">
+            <End Role="ParticipantTypes" EntitySet="ParticipantTypes" />
+            <End Role="Invitations" EntitySet="Invitations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitations_Users" Association="Self.FK_Invitations_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Invitations" EntitySet="Invitations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Participants_Events" Association="Self.FK_Participants_Events">
+            <End Role="Events" EntitySet="Events" />
+            <End Role="Participants" EntitySet="Participants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Participants_ParticipantTypes" Association="Self.FK_Participants_ParticipantTypes">
+            <End Role="ParticipantTypes" EntitySet="ParticipantTypes" />
+            <End Role="Participants" EntitySet="Participants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Participants_Users" Association="Self.FK_Participants_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Participants" EntitySet="Participants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserImageMapping_UserImages" Association="Self.FK_UserImageMapping_UserImages">
+            <End Role="UserImages" EntitySet="UserImages" />
+            <End Role="UserImageMapping" EntitySet="UserImageMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserImageMapping_Users" Association="Self.FK_UserImageMapping_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserImageMapping" EntitySet="UserImageMapping" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EventsRegistrationDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ManagerId" Type="Int32" Nullable="false" />
+          <Property Name="EventTypeId" Type="Int32" Nullable="false" />
+          <Property Name="IsPublic" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="EventType" Relationship="Self.FK_Events_EventTypes" FromRole="Events" ToRole="EventTypes" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Events_Users" FromRole="Events" ToRole="Users" />
+          <NavigationProperty Name="Invitations" Relationship="Self.FK_Invitations_Events" FromRole="Events" ToRole="Invitations" />
+          <NavigationProperty Name="Participants" Relationship="Self.FK_Participants_Events" FromRole="Events" ToRole="Participants" />
+        </EntityType>
+        <EntityType Name="EventType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Events" Relationship="Self.FK_Events_EventTypes" FromRole="EventTypes" ToRole="Events" />
+        </EntityType>
+        <EntityType Name="Invitation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ParticipantTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Event" Relationship="Self.FK_Invitations_Events" FromRole="Invitations" ToRole="Events" />
+          <NavigationProperty Name="ParticipantType" Relationship="Self.FK_Invitations_ParticipantTypes" FromRole="Invitations" ToRole="ParticipantTypes" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Invitations_Users" FromRole="Invitations" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Participant">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="ParticipantTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Event" Relationship="Self.FK_Participants_Events" FromRole="Participants" ToRole="Events" />
+          <NavigationProperty Name="ParticipantType" Relationship="Self.FK_Participants_ParticipantTypes" FromRole="Participants" ToRole="ParticipantTypes" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Participants_Users" FromRole="Participants" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="ParticipantType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Invitations" Relationship="Self.FK_Invitations_ParticipantTypes" FromRole="ParticipantTypes" ToRole="Invitations" />
+          <NavigationProperty Name="Participants" Relationship="Self.FK_Participants_ParticipantTypes" FromRole="ParticipantTypes" ToRole="Participants" />
+        </EntityType>
+        <EntityType Name="UserImageMapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImageNumber" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserImageID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserImage" Relationship="Self.FK_UserImageMapping_UserImages" FromRole="UserImageMapping" ToRole="UserImages" />
+          <NavigationProperty Name="User" Relationship="Self.FK_UserImageMapping_Users" FromRole="UserImageMapping" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="UserImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" MaxLength="260" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserImageMappings" Relationship="Self.FK_UserImageMapping_UserImages" FromRole="UserImages" ToRole="UserImageMapping" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NickName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Events" Relationship="Self.FK_Events_Users" FromRole="Users" ToRole="Events" />
+          <NavigationProperty Name="Invitations" Relationship="Self.FK_Invitations_Users" FromRole="Users" ToRole="Invitations" />
+          <NavigationProperty Name="Participants" Relationship="Self.FK_Participants_Users" FromRole="Users" ToRole="Participants" />
+          <NavigationProperty Name="UserImageMappings" Relationship="Self.FK_UserImageMapping_Users" FromRole="Users" ToRole="UserImageMapping" />
+        </EntityType>
+        <Association Name="FK_Events_EventTypes">
+          <End Role="EventTypes" Type="Self.EventType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Events" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Events">
+              <PropertyRef Name="EventTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Events_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Events" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Events">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitations_Events">
+          <End Role="Events" Type="Self.Event" Multiplicity="1" />
+          <End Role="Invitations" Type="Self.Invitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Events">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invitations">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Participants_Events">
+          <End Role="Events" Type="Self.Event" Multiplicity="1" />
+          <End Role="Participants" Type="Self.Participant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Events">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participants">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitations_ParticipantTypes">
+          <End Role="ParticipantTypes" Type="Self.ParticipantType" Multiplicity="1" />
+          <End Role="Invitations" Type="Self.Invitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ParticipantTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invitations">
+              <PropertyRef Name="ParticipantTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitations_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Invitations" Type="Self.Invitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invitations">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Participants_ParticipantTypes">
+          <End Role="ParticipantTypes" Type="Self.ParticipantType" Multiplicity="1" />
+          <End Role="Participants" Type="Self.Participant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ParticipantTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participants">
+              <PropertyRef Name="ParticipantTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Participants_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Participants" Type="Self.Participant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participants">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserImageMapping_UserImages">
+          <End Role="UserImages" Type="Self.UserImage" Multiplicity="1" />
+          <End Role="UserImageMapping" Type="Self.UserImageMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserImages">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserImageMapping">
+              <PropertyRef Name="UserImageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserImageMapping_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserImageMapping" Type="Self.UserImageMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserImageMapping">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EventsRegistrationDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Events" EntityType="Self.Event" />
+          <EntitySet Name="EventTypes" EntityType="Self.EventType" />
+          <EntitySet Name="Invitations" EntityType="Self.Invitation" />
+          <EntitySet Name="Participants" EntityType="Self.Participant" />
+          <EntitySet Name="ParticipantTypes" EntityType="Self.ParticipantType" />
+          <EntitySet Name="UserImageMappings" EntityType="Self.UserImageMapping" />
+          <EntitySet Name="UserImages" EntityType="Self.UserImage" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Events_EventTypes" Association="Self.FK_Events_EventTypes">
+            <End Role="EventTypes" EntitySet="EventTypes" />
+            <End Role="Events" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Events_Users" Association="Self.FK_Events_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Events" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitations_Events" Association="Self.FK_Invitations_Events">
+            <End Role="Events" EntitySet="Events" />
+            <End Role="Invitations" EntitySet="Invitations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Participants_Events" Association="Self.FK_Participants_Events">
+            <End Role="Events" EntitySet="Events" />
+            <End Role="Participants" EntitySet="Participants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitations_ParticipantTypes" Association="Self.FK_Invitations_ParticipantTypes">
+            <End Role="ParticipantTypes" EntitySet="ParticipantTypes" />
+            <End Role="Invitations" EntitySet="Invitations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitations_Users" Association="Self.FK_Invitations_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Invitations" EntitySet="Invitations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Participants_ParticipantTypes" Association="Self.FK_Participants_ParticipantTypes">
+            <End Role="ParticipantTypes" EntitySet="ParticipantTypes" />
+            <End Role="Participants" EntitySet="Participants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Participants_Users" Association="Self.FK_Participants_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Participants" EntitySet="Participants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserImageMapping_UserImages" Association="Self.FK_UserImageMapping_UserImages">
+            <End Role="UserImages" EntitySet="UserImages" />
+            <End Role="UserImageMapping" EntitySet="UserImageMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserImageMapping_Users" Association="Self.FK_UserImageMapping_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserImageMapping" EntitySet="UserImageMappings" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EventsRegistrationDBModelStoreContainer" CdmEntityContainer="EventsRegistrationDBEntities">
+          <EntitySetMapping Name="Events">
+            <EntityTypeMapping TypeName="EventsRegistrationDBModel.Event">
+              <MappingFragment StoreEntitySet="Events">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+                <ScalarProperty Name="EventTypeId" ColumnName="EventTypeId" />
+                <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventTypes">
+            <EntityTypeMapping TypeName="EventsRegistrationDBModel.EventType">
+              <MappingFragment StoreEntitySet="EventTypes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invitations">
+            <EntityTypeMapping TypeName="EventsRegistrationDBModel.Invitation">
+              <MappingFragment StoreEntitySet="Invitations">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ParticipantTypeId" ColumnName="ParticipantTypeId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Participants">
+            <EntityTypeMapping TypeName="EventsRegistrationDBModel.Participant">
+              <MappingFragment StoreEntitySet="Participants">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="ParticipantTypeId" ColumnName="ParticipantTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ParticipantTypes">
+            <EntityTypeMapping TypeName="EventsRegistrationDBModel.ParticipantType">
+              <MappingFragment StoreEntitySet="ParticipantTypes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserImageMappings">
+            <EntityTypeMapping TypeName="EventsRegistrationDBModel.UserImageMapping">
+              <MappingFragment StoreEntitySet="UserImageMapping">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ImageNumber" ColumnName="ImageNumber" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserImageID" ColumnName="UserImageID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserImages">
+            <EntityTypeMapping TypeName="EventsRegistrationDBModel.UserImage">
+              <MappingFragment StoreEntitySet="UserImages">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="EventsRegistrationDBModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

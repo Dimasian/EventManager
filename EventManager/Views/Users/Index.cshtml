@@ -1,0 +1,82 @@
+﻿@model EventManager.ViewModels.UsersIndexViewModel
+
+@{
+  ViewBag.Title = "Users";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Users.FirstOrDefault().FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Users.FirstOrDefault().MiddleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Users.FirstOrDefault().LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Users.FirstOrDefault().NickName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Users.FirstOrDefault().RegistrationDate)
+        </th>
+        <th>
+            Actions
+        </th>
+        <th>
+            User Image
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Users)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MiddleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NickName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RegistrationDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </td>
+        <td>
+            @if (item.UserImageMappings != null && item.UserImageMappings.Any())
+            {
+            <img src="@(Url.Content(Constants.UsersImagePath) + item.UserImageMappings.OrderBy(pim => pim.ImageNumber).ElementAt(0).UserImage.FileName)" 
+                 style=padding:5px width=50 height=70>
+            }
+        </td>
+    </tr>
+    }
+
+</table>
