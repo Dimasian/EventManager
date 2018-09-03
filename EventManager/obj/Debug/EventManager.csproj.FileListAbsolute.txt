@@ -85,3 +85,6 @@ d:\ИТМО инженер-программист\Diplom\EventManager\EventManag
 d:\ИТМО инженер-программист\Diplom\EventManager\EventManager\bin\PagedList.Mvc.dll
 d:\ИТМО инженер-программист\Diplom\EventManager\EventManager\bin\PagedList.xml
 d:\ИТМО инженер-программист\Diplom\EventManager\EventManager\bin\PagedList.Mvc.xml
+D:\ИТМО инженер-программист\Diplom\EventManager\EventManager\obj\Debug\EventManager.Migrations.InitialCreate.resources
+D:\ИТМО инженер-программист\Diplom\EventManager\EventManager\obj\Debug\EventManager.csproj.GenerateResource.Cache
+D:\ИТМО инженер-программист\Diplom\EventManager\EventManager\obj\Debug\EventManager.Migrations.update_user_fields.resources

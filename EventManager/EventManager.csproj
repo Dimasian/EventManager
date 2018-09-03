@@ -196,6 +196,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\EventTypesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -203,7 +204,9 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ParticipantsController.cs" />
     <Compile Include="Controllers\ParticipantTypesController.cs" />
+    <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\UserImagesController.cs" />
+    <Compile Include="Controllers\UsersAdminController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Event.cs">
       <DependentUpon>EventManagerDBContext.tt</DependentUpon>
@@ -232,7 +235,17 @@
     <Compile Include="Invitation.cs">
       <DependentUpon>EventManagerDBContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808241055265_InitialCreate.cs" />
+    <Compile Include="Migrations\201808241055265_InitialCreate.Designer.cs">
+      <DependentUpon>201808241055265_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808291139166_update_user_fields.cs" />
+    <Compile Include="Migrations\201808291139166_update_user_fields.Designer.cs">
+      <DependentUpon>201808291139166_update_user_fields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Address.cs" />
     <Compile Include="Models\EventMetaData.cs" />
     <Compile Include="Models\EventTypeComparer.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -258,6 +271,7 @@
     <Compile Include="UserImageMapping.cs">
       <DependentUpon>EventManagerDBContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AdminViewModel.cs" />
     <Compile Include="ViewModels\EventListViewModel.cs" />
     <Compile Include="ViewModels\EventWithDetailsViewModel.cs" />
     <Compile Include="ViewModels\UsersIndexViewModel.cs" />
@@ -423,6 +437,17 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\RolesAdmin\Index.cshtml" />
+    <Content Include="Views\RolesAdmin\Details.cshtml" />
+    <Content Include="Views\RolesAdmin\Create.cshtml" />
+    <Content Include="Views\RolesAdmin\Edit.cshtml" />
+    <Content Include="Views\RolesAdmin\Delete.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\UsersAdmin\Index.cshtml" />
+    <Content Include="Views\UsersAdmin\Details.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Address.cshtml" />
+    <Content Include="Views\UsersAdmin\Create.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Address.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -437,6 +462,15 @@
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201808241055265_InitialCreate.resx">
+      <DependentUpon>201808241055265_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808291139166_update_user_fields.resx">
+      <DependentUpon>201808291139166_update_user_fields.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

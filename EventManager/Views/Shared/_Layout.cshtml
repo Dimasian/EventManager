@@ -23,13 +23,10 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-					<li>@Html.ActionLink("Users", "Index", "Users")</li>
-					<li>@Html.ActionLink("Events", "Index", "Events")</li>
-                    <li>@Html.ActionLink("Invitations", "Index", "Invitations")</li>
-					<li>@Html.ActionLink("Participants", "Index", "Participants")</li>
-					<li>@Html.ActionLink("Participant Types", "Index", "ParticipantTypes")</li>
-					<li>@Html.ActionLink("Event types", "Index", "EventTypes")</li>
-                    <li>@Html.ActionLink("Manage Images", "Index", "UserImages")</li>
+                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
